@@ -2,6 +2,7 @@ import React from "react";
 import s from "./Home.module.scss";
 import Button from "@/components/Button/Button";
 import CheckBox from "../Check/CheckBox";
+import RadioButton from "../RadioButton/RadioButton";
 
 const HomePage = () => {
   return (
@@ -22,6 +23,12 @@ const HomePage = () => {
           <CheckBox text="включить" />
           <CheckBox disabled text="disabled" />
           <CheckBox disabled checked text="disabled checked" />
+        </div>
+        <div className="mt-4">
+          <form action="form">
+            <RadioButton label="Radio button" value="Radio" />
+            <RadioButton label="Radio button disabled" value="Radio" disabled />
+          </form>
         </div>
       </div>
     </main>
