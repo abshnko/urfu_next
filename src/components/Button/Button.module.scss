@@ -1,0 +1,32 @@
+@import '../../styles/variables.scss';
+
+.button {
+  background-color: $bg_lightGreen;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 6px;
+  color: $color_darkGreen;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+  text-transform: uppercase;
+  padding: 12px 24px;
+
+  &:hover {
+    background-color: $bg_turquoise;
+    color: white;
+    box-shadow: none;
+  }
+  &:active {
+    background-color: $bg_darkGreen;
+  }
+}
+
+.disabled {
+  @extend .button;
+  background-color: $bg_lightGreenDisabled;
+  //   color: $color_lightGreen;
+  box-shadow: none;
+  pointer-events: none;
+  opacity: 0.45;
+}
