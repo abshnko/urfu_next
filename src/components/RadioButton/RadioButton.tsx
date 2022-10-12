@@ -18,16 +18,15 @@ const RadioButtonPresentation: FC<IRadioButtonPresentationProps> = ({
     if (!disabled) onClick(e);
   };
   return (
-    <div className="flex items-center">
+    <div className={s.container} onClick={clickHandler}>
       <div
-        className={`${s.container} ${checked ? s.checked : ""} ${
+        className={`${s.radio_container} ${checked ? s.checked : ""} ${
           disabled ? s.disabled : ""
         } `}
-        onClick={clickHandler}
       >
         {checked && <div className={s.radio} />}
       </div>
-      <span className="ml-2">{label}</span>
+      <label>{label}</label>
     </div>
   );
 };
@@ -54,7 +53,7 @@ const RadioButton: FC<IRadioButtonProps> = ({
   }, [checked]);
 
   const clickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
-    setChecked((prev) => !prev);
+    setChecked(true);
     onClick?.(e, value);
   };
 
