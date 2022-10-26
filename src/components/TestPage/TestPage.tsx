@@ -1,38 +1,37 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { data } from "data";
 import Question from "./Question";
 import Header from "./Header";
 import QuestionList from "./QuestionList";
 
-const TestPage = () => {
-  const questions = data.questions;
-  const [currentQuestionId, setCurrentQuestionId] = useState(questions[0]?.id);
-  const [currentQuestion, setCurrentQuestion] = useState<typeof questions[0]>();
-  const [chosenAnswerId, setChosenAnswerId] = useState<number | undefined>(
+const TestPage = ({ id }: { id: string }) => {
+  const questions = data.test.questions;
+  const currentQuestion = questions.find((q) => q.id === id);
+  const [chosenAnswerId, setChosenAnswerId] = useState<string | undefined>(
     undefined
   );
-  console.log(currentQuestionId);
-  console.log(questions.find((q) => q.id === currentQuestionId)?.text);
+  const ids = questions.map((q) => q.id);
 
-  useEffect(() => {
-    setCurrentQuestion(questions.find((q) => q.id === currentQuestionId));
-    setChosenAnswerId(undefined);
-  }, [currentQuestionId]);
-
-  const chooseAnswer = (id: number) => {
+  const chooseAnswer = (id: string) => {
     setChosenAnswerId(id);
   };
 
   return (
     <div className="flex min-h-screen flex-col">
-      <QuestionList
-        questions={questions}
-        setCurrentQuestionId={setCurrentQuestionId}
-      />
+      <QuestionList questions={questions} currentQuestionId={id} allIds={ids} />
       <div className="ml-[100px] flex w-[calc(100%-100px)] flex-col items-center">
-        <Header />
+        <Header
+          all={data.test.questions.length}
+          current={ids.indexOf(id) + 1}
+          time={data.test.isTimed ? data.test.timeInMinutes : undefined}
+        />
         {currentQuestion && (
           <Question
+            timer={
+              currentQuestion.isTimed
+                ? currentQuestion.timeInSeconds
+                : undefined
+            }
             chooseAnswer={chooseAnswer}
             chosenAnswerId={chosenAnswerId}
             currentQuestion={currentQuestion}
