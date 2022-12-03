@@ -1,9 +1,9 @@
 import React from "react";
-import s from "./Home.module.scss";
 import Button from "@/components/Button/Button";
 import CheckBox from "../Check/CheckBox";
 import RadioButton from "../RadioButton/RadioButton";
 import Link from "next/link";
+import { signIn } from "next-auth/react";
 
 const HomePage = () => {
   return (
@@ -31,9 +31,13 @@ const HomePage = () => {
             <RadioButton label="Radio button disabled" value="Radio" disabled />
           </form>
         </div>
-        <div className="mt-4">
-          <Link href="/test"> To Test Page</Link>
+        <div className="mt-4 flex items-center gap-4">
+          <div>Тест &quot;История России&quot;</div>
+          <Link href="/test/638b1ff520e980536543801b">
+            <Button>Начать игру</Button>
+          </Link>
         </div>
+        <button onClick={() => signIn("google")}>Войти</button>
       </div>
     </main>
   );

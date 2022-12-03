@@ -1,9 +1,10 @@
 import React from "react";
-import { data } from "data";
 import AnswerButton from "./AnswerButton";
 import Button from "../Button/Button";
 import Image from "next/image";
 import CircleTimer from "../CircleTimer/CircleTimer";
+import { Question } from "@prisma/client";
+import { trpc } from "@/utils/trpc";
 
 const Question = ({
   currentQuestion,
@@ -11,15 +12,20 @@ const Question = ({
   chooseAnswer,
   timer,
 }: {
-  currentQuestion: typeof data.test.questions[0];
+  currentQuestion: Question;
   chosenAnswerId: string | undefined;
   chooseAnswer: (id: string) => void;
   timer?: number;
 }) => {
+  const { data: answers, isLoading } = trpc.answer.getAll.useQuery({
+    questionId: currentQuestion.id,
+  });
+
+  if (isLoading) return <div>Варианты ответов загружаются...</div>;
   return (
     <div className="question_area mt-[128px] flex w-max flex-1 flex-col items-center justify-center">
       {currentQuestion.isTimed && <CircleTimer timer={timer!} />}
-      {currentQuestion.hasMedia && currentQuestion.mediaType === "img" ? (
+      {currentQuestion.hasMedia ? (
         <div className="relative mt-[60px] mb-[20px] h-[400px] w-[600px]">
           <Image
             src={`/game_assets${currentQuestion.mediaSrc}`}
@@ -28,12 +34,10 @@ const Question = ({
             objectFit="contain"
           />
         </div>
-      ) : (
-        <div>Other type of media</div>
-      )}
+      ) : null}
       <div className="question">{currentQuestion.text}</div>
       <div className="answers mt-[60px] grid grid-cols-2 gap-6">
-        {currentQuestion.answers.map((answer: any) => {
+        {answers?.map((answer: any) => {
           return (
             <AnswerButton
               onChooseAnswer={() => chooseAnswer(answer.id)}

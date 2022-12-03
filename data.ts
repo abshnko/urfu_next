@@ -1,5 +1,6 @@
 export const data = {
   test: {
+    name: "Test Name",
     isTimed: true,
     timeInMinutes: 30,
     questions: [
