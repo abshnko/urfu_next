@@ -14,6 +14,26 @@ model Example {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 }
 
+model UserAnswerForQuestion {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  questionId String
+  userAnswerId String
+
+  userTestAnswer UserTestAnswer? @relation(fields: [userTestAnswerId], references: [id])
+  userTestAnswerId String       @db.ObjectId
+}
+
+model UserTestAnswer {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  questionAnswers UserAnswerForQuestion[]
+  
+  user User? @relation(fields: [userId], references: [id])
+  userId String       @db.ObjectId
+
+  test Test? @relation(fields: [testId], references: [id])
+  testId String     @db.ObjectId
+}
+
 model RightAnswer {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
@@ -58,6 +78,7 @@ model Test {
   isTimed       Boolean
   timeInMinutes Int?
   questions     Question[]
+  userTestAnswers   UserTestAnswer[]
 
   author   User?  @relation(fields: [authorId], references: [id])
   authorId String @db.ObjectId
@@ -105,6 +126,7 @@ model User {
 
   tests      Test[]
   takenTests String[]
+  userTestAnswers UserTestAnswer[]
 }
 
 enum Role {

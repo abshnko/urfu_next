@@ -5,6 +5,9 @@ import Header from "./Header";
 import QuestionList from "./QuestionList";
 import { trpc } from "@/utils/trpc";
 import { Question as QuestionType } from "@prisma/client";
+import { useSession } from "next-auth/react";
+import useLocalStorage from "use-local-storage";
+import { QuestionAnswer } from "@/types/types";
 
 const QuestionPage = ({
   questionId,
@@ -16,6 +19,11 @@ const QuestionPage = ({
   const { data: questions, isLoading } = trpc.question.getAll.useQuery({
     testId: testId as string,
   });
+  const { data: session } = useSession();
+
+  const [questionAnswers, setQuestionAnswers] = useLocalStorage<
+    QuestionAnswer[]
+  >("testAnswers", []);
 
   const [currentQuestion, setCurrentQuestion] = useState<
     QuestionType | undefined
@@ -52,7 +60,7 @@ const QuestionPage = ({
           current={ids.indexOf(questionId) + 1}
           time={data.test.isTimed ? data.test.timeInMinutes : undefined}
         />
-        {currentQuestion && (
+        {currentQuestion && questions && (
           <Question
             timer={
               currentQuestion.isTimed && currentQuestion.timeInSeconds
@@ -62,6 +70,11 @@ const QuestionPage = ({
             chooseAnswer={chooseAnswer}
             chosenAnswerId={chosenAnswerId}
             currentQuestion={currentQuestion}
+            allIds={ids}
+            testId={testId}
+            questionAnswers={questionAnswers}
+            setQuestionAnswers={setQuestionAnswers}
+            setChosenAnswerId={setChosenAnswerId}
           />
         )}
       </div>
